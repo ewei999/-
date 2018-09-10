@@ -1,0 +1,12 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 365
+  Width = 469
+  object ADOCon_ALi: TADOConnection
+    ConnectionTimeout = 30
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 88
+    Top = 48
+  end
+end

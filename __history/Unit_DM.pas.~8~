@@ -1,0 +1,95 @@
+unit Unit_DM;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB,System.IniFiles,Vcl.Forms;
+
+type
+  TDataModule1 = class(TDataModule)
+    ADOCon_ALi: TADOConnection;
+  private
+    procedure InitDatabase(confilename:string);
+    function UnEncryptString(Source, Key: string): string;
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule1: TDataModule1;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+
+function TDataModule1.UnEncryptString(Source, Key: string): string;
+var
+  KeyLen: integer;
+  KeyPos: integer;
+  Offset: integer;
+  Dest: string;
+  SrcPos: integer;
+  SrcAsc: integer;
+  TmpSrcAsc: integer;
+begin
+  KeyLen := Length(Key);
+  if KeyLen = 0 then
+    Key := 'lyb';
+  KeyPos := 0;
+  Offset := strtoint('$' + copy(Source, 1, 2));
+  SrcPos := 3;
+  repeat
+    SrcAsc := strtoint('$' + copy(Source, SrcPos, 2));
+    if KeyPos < KeyLen then
+      KeyPos := KeyPos + 1
+    else
+      KeyPos := 1;
+    TmpSrcAsc := SrcAsc xor Ord(Key[KeyPos]);
+    if TmpSrcAsc <= Offset then
+      TmpSrcAsc := 255 + TmpSrcAsc - Offset
+    else
+      TmpSrcAsc := TmpSrcAsc - Offset;
+    Dest := Dest + chr(TmpSrcAsc);
+    Offset := SrcAsc;
+    SrcPos := SrcPos + 2;
+  until SrcPos >= Length(Source);
+  result := Dest;
+end;
+
+
+procedure TDataModule1.InitDatabase(confilename:string);
+var
+  L_IniFile:TIniFile;
+  str_temp :string;
+  host,sjk,username,password : string;
+begin
+  ADOCon_ALi.Connected := False;
+  L_IniFile := TIniFile.Create(ExtractFilePath(application.ExeName)+confilename);
+  try
+    str_temp :=L_IniFile.ReadString('connection', 'host', '');
+    host := str_temp;
+    str_temp := L_IniFile.ReadString('connection','sjk','');
+    sjk := str_temp;
+    str_temp :=L_IniFile.ReadString('connection', 'username', '');
+
+    username := str_temp;
+    str_temp :=L_IniFile.ReadString('connection', 'password', '');
+    str_temp := UnEncryptString(str_temp,'');
+    password := str_temp;
+
+   ADOCon_ALi.ConnectionString:='Provider=SQLOLEDB.1;'+
+                  'Persist Security Info=True;  '+
+                  'Data Source='+QuotedStr(host)+
+                  ';Initial Catalog='+QuotedStr(sjk)+
+                  ';User ID='+QuotedStr(username)+
+                  ';Password='+QuotedStr(password);
+  finally
+    L_IniFile.free;
+  end;
+end;
+
+
+end.

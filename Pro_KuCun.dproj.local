@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899-12-30 00:00:00.000.381,=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.974,D:\程序\中央库存管理系统\Unit_DM.dfm=D:\程序\中央库存管理系统\Unit1.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.485,=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.334,=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.663,=C:\Users\WangYunling.DESKTOP-C68L65I\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.969,D:\程序\中央库存管理系统\Unit_login.dfm=C:\Users\WangYunling.DESKTOP-C68L65I\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.735,D:\程序\中央库存管理系统\Pro_KuCun.dproj=C:\Users\WangYunling.DESKTOP-C68L65I\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.690,=C:\Users\WangYunling.DESKTOP-C68L65I\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.974,D:\程序\中央库存管理系统\Unit_DM.pas=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.226,D:\程序\中央库存管理系统\Unit_main.dfm=D:\程序\中央库存管理系统\Unit1.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.690,=D:\程序\中央库存管理系统\frmRegister.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.392,=D:\程序\中央库存管理系统\Unit_caigou_shenqing_new.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.240,D:\程序\中央库存管理系统\Unit_public.pas=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.507,=D:\程序\中央库存管理系统\Encode.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.969,D:\程序\中央库存管理系统\Unit_login.pas=C:\Users\WangYunling.DESKTOP-C68L65I\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.226,D:\程序\中央库存管理系统\Unit_main.pas=D:\程序\中央库存管理系统\Unit1.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>

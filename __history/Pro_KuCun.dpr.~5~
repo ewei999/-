@@ -1,0 +1,20 @@
+program Pro_KuCun;
+
+uses
+  Vcl.Forms,
+  Unit_login in 'Unit_login.pas' {Form1},
+  Unit_DM in 'Unit_DM.pas' {DataModule1: TDataModule},
+  frmRegister in 'frmRegister.pas' {Form_Register},
+  Encode in 'Encode.pas',
+  Unit_public in 'Unit_public.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TDataModule1, DataModule1);
+  Application.CreateForm(TForm_Register, Form_Register);
+  Application.Run;
+end.

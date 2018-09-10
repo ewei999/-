@@ -1,0 +1,13 @@
+unit Unit_public;
+
+interface
+  uses inifiles;
+
+var
+  G_IniSetingFile: TIniFile; //ÅäÖÃÎÄ¼ş
+  G_LocalKey, G_RegisterCode: string;
+
+
+implementation
+
+end.

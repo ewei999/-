@@ -1,0 +1,227 @@
+unit Unit_caigou_shenqing_new;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, cxContainer, cxEdit, dxSkinsCore,
+  dxSkinsDefaultPainters, cxStyles, dxSkinscxPCPainter, cxCustomData, cxFilter,
+  cxData, cxDataStorage, Data.DB, cxDBData, Vcl.Menus, Vcl.StdCtrls, cxButtons,
+  cxMemo, cxMaskEdit, cxDropDownEdit, cxCalendar, cxTextEdit, cxLabel,
+  Data.Win.ADODB, cxGridLevel, cxClasses, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid, cxGroupBox,
+  cxDBLookupComboBox, System.Actions, Vcl.ActnList,
+  Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan, dxGDIPlusClasses, Vcl.ExtCtrls,
+  cxNavigator, Vcl.ComCtrls, dxCore, cxDateUtils, cxCurrencyEdit, dxSkinBlack,
+  dxSkinBlue, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
+  dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinValentine, dxSkinVS2010,
+  dxSkinWhiteprint, dxSkinXmas2008Blue;
+
+type
+  TForm_caigou_shenqing_new = class(TForm)
+    cxGrid1DBTableView1: TcxGridDBTableView;
+    cxGrid1Level1: TcxGridLevel;
+    cxGrid1: TcxGrid;
+    ADOQuery1: TADOQuery;
+    DataSource1: TDataSource;
+    cxGrid1DBTableView1DBColumn2: TcxGridDBColumn;
+    cxGrid1DBTableView1DBColumn4: TcxGridDBColumn;
+    cxGrid1DBTableView1DBColumn5: TcxGridDBColumn;
+    cxGrid1DBTableView1Column1: TcxGridDBColumn;
+    Image2: TImage;
+    cxLabel10: TcxLabel;
+    cxButton4: TcxButton;
+    ActionManager1: TActionManager;
+    Action_close: TAction;
+    cxGrid1DBTableView1Column2: TcxGridDBColumn;
+    cxGrid1DBTableView1Column3: TcxGridDBColumn;
+    cxGrid1DBTableView1Column4: TcxGridDBColumn;
+    cxLabel1: TcxLabel;
+    cxLabel2: TcxLabel;
+    cxDateEdit1: TcxDateEdit;
+    cxLabel3: TcxLabel;
+    cxMemo1: TcxMemo;
+    cxLabel4: TcxLabel;
+    cxLabel5: TcxLabel;
+    cxGrid1DBTableView1Column5: TcxGridDBColumn;
+    cxGrid1DBTableView1Column6: TcxGridDBColumn;
+    cxGrid1DBTableView1Column7: TcxGridDBColumn;
+    cxLabel_bianhao: TcxLabel;
+    cxButton6: TcxButton;
+    act_excel: TAction;
+    procedure FormShow(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure Action_closeExecute(Sender: TObject);
+    procedure act_excelExecute(Sender: TObject);
+
+  private
+    procedure Save_Data(bj:string);
+  public
+    baocun:boolean;
+    zt : string;
+  end;
+
+var
+  Form_caigou_shenqing_new: TForm_caigou_shenqing_new;
+
+implementation
+
+{$R *.dfm}
+
+uses unit_dm, Unit_public, Unit_main;
+
+procedure TForm_caigou_shenqing_new.Save_Data(bj:string);
+begin
+  if ADOQuery1.RecordCount=0 then
+  begin
+    Application.MessageBox('请至少添加一条申请记录', '提示', MB_OK);
+    exit;
+  end;
+
+  ADOQuery1.Edit;
+  ADOQuery1.Post;
+
+  ADOQuery1.DisableControls;
+  ADOQuery1.First;
+  while not ADOQuery1.eof do
+  begin
+    if (ADOQuery1.FieldByName('数量').AsString = '') or (ADOQuery1.FieldByName('数量').asfloat = 0) then
+    begin
+      Application.MessageBox(pchar('名称：'+ADOQuery1.FieldByName('名称').AsString+'，请输入申请数量'), '提示', MB_OK);
+      ADOQuery1.EnableControls;
+      Exit;
+    end;
+    ADOQuery1.Next;
+  end;
+  ADOQuery1.EnableControls;
+
+  DataModule1.ADOConnection1.BeginTrans;
+  try
+    if zt = 'new' then
+    begin
+      cxLabel_bianhao.Caption := AutoCreateNo_JiaMu('TH'+g_user.FenYuanID,'提货申请','统一');
+
+      DataModule1.qry_AL_1.Close;
+      DataModule1.qry_AL_1.SQL.Text := 'select top 0 * from 提货申请主表';
+      DataModule1.qry_AL_1.open;
+
+      DataModule1.qry_AL_1.Append;
+      DataModule1.qry_AL_1.FieldByName('申请编号').AsString := cxLabel_bianhao.Caption;
+      DataModule1.qry_AL_1.FieldByName('是否作废').AsBoolean := false;
+    end
+    else if zt = 'edit' then
+    begin
+      DataModule1.qry_AL_1.Close;
+      DataModule1.qry_AL_1.SQL.Text := 'select * from 提货申请主表 where 申请编号='+
+        QuotedStr(cxLabel_bianhao.Caption);
+      DataModule1.qry_AL_1.open;
+      DataModule1.qry_AL_1.Edit;
+    end;
+
+    DataModule1.qry_AL_1.FieldByName('申请说明').AsString := cxMemo1.Lines.Text;
+    DataModule1.qry_AL_1.FieldByName('申请日期').asdatetime := cxDateEdit1.date;
+    DataModule1.qry_AL_1.FieldByName('申请人').AsString := G_user.UserName;
+    DataModule1.qry_AL_1.FieldByName('员工编号').AsString := G_user.userID;
+    if bj='草稿' then
+      DataModule1.qry_AL_1.FieldByName('状态').AsInteger := 0;
+    if bj='提交' then
+      DataModule1.qry_AL_1.FieldByName('状态').AsInteger := 1;
+    DataModule1.qry_AL_1.FieldByName('分店代码').AsString := G_user.FenYuanID;
+    DataModule1.qry_AL_1.Post;
+
+    ADOQuery1.DisableControls;
+    ADOQuery1.First;
+    while not ADOQuery1.Eof do
+    begin
+      ADOQuery1.Edit;
+      ADOQuery1.FieldByName('申请编号').AsString := cxLabel_bianhao.Caption;
+      if bj='草稿' then
+        ADOQuery1.FieldByName('状态').AsInteger := 0;
+      if bj='提交' then
+        ADOQuery1.FieldByName('状态').AsInteger := 1;
+      ADOQuery1.Post;
+      ADOQuery1.Next;
+    end;
+    ADOQuery1.EnableControls;
+
+    ADOQuery1.UpdateBatch();
+    baocun:=true;
+    DataModule1.ADOConnection1.CommitTrans;
+  except
+    DataModule1.ADOConnection1.RollbackTrans;
+    Application.MessageBox('保存失败', '提示', MB_OK);
+  end;
+
+  if baocun then
+  begin
+    if bj='草稿' then
+      Application.MessageBox('保存成功', '提示', MB_OK);
+    if bj='提交' then
+      Application.MessageBox('提交成功', '提示', MB_OK);
+    close;
+  end;
+end;
+
+procedure TForm_caigou_shenqing_new.Action_closeExecute(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TForm_caigou_shenqing_new.act_excelExecute(Sender: TObject);
+begin
+  DaochuExcel(cxGrid1);
+end;
+
+procedure TForm_caigou_shenqing_new.FormShow(Sender: TObject);
+begin
+  if zt = 'new' then
+  begin
+    cxLabel1.Visible:=False;
+    cxLabel_bianhao.Visible:=False;
+    cxDateEdit1.Date := date;
+    cxLabel5.Caption := G_user.UserName;
+    ADOQuery1.Active := false;
+    ADOQuery1.SQL.text := 'select top 0 * from 提货申请明细表';
+    ADOQuery1.Active := true;
+  end;
+  if cxLabel_bianhao.Caption<>'' then
+  begin
+    DataModule1.qry_AL_1.Close;
+    DataModule1.qry_AL_1.SQL.Text:='select * from 提货申请主表 where 申请编号='+QuotedStr(cxLabel_bianhao.Caption)+'';
+    DataModule1.qry_AL_1.open;
+
+    cxDateEdit1.Date := DataModule1.qry_AL_1.FieldByName('申请日期').asdatetime;
+    cxLabel5.Caption := DataModule1.qry_AL_1.FieldByName('申请人').asstring;
+    cxMemo1.Lines.text := DataModule1.qry_AL_1.FieldByName('申请说明').asstring;
+
+    ADOQuery1.Active := false;
+    ADOQuery1.SQL.text := 'select  * from 提货申请明细表 where 申请编号 = '+ QuotedStr(cxLabel_bianhao.Caption);
+    ADOQuery1.Active := true;
+  end;
+end;
+
+
+procedure TForm_caigou_shenqing_new.N1Click(Sender: TObject);
+begin
+  if zt = 'chakan'  then
+    exit;
+  if cxGrid1DBTableView1.OptionsData.Editing=false then
+  begin
+    Application.MessageBox('已经提交的申请单不能删除记录', '提示', MB_OK);
+    exit;
+  end;
+
+  ADOQuery1.Delete;
+end;
+
+end.
